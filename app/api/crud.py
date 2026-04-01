@@ -53,6 +53,23 @@ def list_rules(
     }
 
 
+def list_rules_all(
+    db: Session,
+    *,
+    device_id: UUID | None,
+    is_enabled: bool | None,
+):
+    query = db.query(models.Rule)
+
+    if device_id is not None:
+        query = query.filter(models.Rule.device_id == str(device_id))
+
+    if is_enabled is not None:
+        query = query.filter(models.Rule.is_enabled == is_enabled)
+
+    return query.order_by(models.Rule.created_at.desc()).all()
+
+
 def get_rule(db: Session, rule_id: UUID) -> models.Rule:
     rule = db.query(models.Rule).filter(models.Rule.id == str(rule_id)).first()
     if rule is None:

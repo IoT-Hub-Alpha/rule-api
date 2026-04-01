@@ -26,11 +26,12 @@ docker run --env-file .env -p 8011:8011 rule-api
 
 ## Endpoints
 
-- `GET /api/v1/rules/`
-- `POST /api/v1/rules/`
-- `GET /api/v1/rules/{rule_id}/`
-- `PATCH /api/v1/rules/{rule_id}/`
-- `DELETE /api/v1/rules/{rule_id}/`
-- `POST /api/v1/rules/{rule_id}/enable`
-- `POST /api/v1/rules/{rule_id}/disable`
+- `GET /v1/rules/`
+- `GET /v1/rules/all`
+- `POST /v1/rules/`
+- `GET /v1/rules/{rule_id}/`
+- `PATCH /v1/rules/{rule_id}/`
+- `DELETE /v1/rules/{rule_id}/`
+- `POST /v1/rules/{rule_id}/enable`
+- `POST /v1/rules/{rule_id}/disable`
 - `GET /health`

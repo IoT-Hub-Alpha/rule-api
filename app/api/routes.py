@@ -11,6 +11,7 @@ from ..db.db import get_db
 from ..core.schemas import (
     RuleCreate,
     RuleListResponse,
+    RuleListSimpleResponse,
     RuleOut,
     RuleResponse,
     RuleUpdate,
@@ -54,6 +55,20 @@ def list_rules(
         "data": [_to_rule_out(item) for item in items],
         "pagination": pagination,
     }
+
+
+@router.get("/all", response_model=RuleListSimpleResponse)
+def list_rules_all(
+    device_id: UUID | None = Query(default=None),
+    is_enabled: bool | None = Query(default=None),
+    db: Session = Depends(get_db),
+):
+    items = crud.list_rules_all(
+        db,
+        device_id=device_id,
+        is_enabled=is_enabled,
+    )
+    return {"data": [_to_rule_out(item) for item in items]}
 
 
 @router.post("/", response_model=RuleResponse, status_code=201)

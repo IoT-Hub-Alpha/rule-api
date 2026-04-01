@@ -10,7 +10,7 @@ app = FastAPI(title="Rule API Service")
 if settings.create_tables:
     Base.metadata.create_all(bind=engine)
 
-app.include_router(rules_router, prefix="/api/v1")
+app.include_router(rules_router, prefix="/v1")
 
 
 @app.get("/health")

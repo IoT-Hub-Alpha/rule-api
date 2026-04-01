@@ -140,3 +140,7 @@ class RuleResponse(BaseModel):
 class RuleListResponse(BaseModel):
     data: list[RuleOut]
     pagination: Pagination
+
+
+class RuleListSimpleResponse(BaseModel):
+    data: list[RuleOut]
