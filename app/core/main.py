@@ -4,7 +4,6 @@ from ..api.routes import router as rules_router
 from ..db.db import Base, engine
 from .settings import settings
 
-
 app = FastAPI(title="Rule API Service")
 
 if settings.create_tables:
