@@ -20,7 +20,13 @@ docker run --env-file .env -p 8011:8011 rule-api
 
 | Variable | Description | Required |
 |----------|-------------|----------|
-| `RULE_API_DATABASE_URL` | SQLAlchemy database URL | Yes |
+| `RULE_API_DATABASE_URL` | SQLAlchemy Postgres URL (psycopg2) overrides all DB_* vars | Yes |
+| `DATABASE_URL` | Generic SQLAlchemy Postgres URL fallback | No |
+| `DB_HOST` | Postgres host (umbrella repo) | Yes (if RULE_API_DATABASE_URL not set) |
+| `DB_PORT` | Postgres port (umbrella repo) | Yes (if RULE_API_DATABASE_URL not set) |
+| `DB_NAME` | Postgres database name (umbrella repo) | Yes (if RULE_API_DATABASE_URL not set) |
+| `DB_USER` | Postgres username (umbrella repo) | Yes (if RULE_API_DATABASE_URL not set) |
+| `DB_PASSWORD` | Postgres password (umbrella repo) | Yes (if RULE_API_DATABASE_URL not set) |
 | `RULE_API_CREATE_TABLES` | Auto-create tables on startup | No |
 | `RULE_API_SQL_ECHO` | Enable SQL query logging | No |
 
