@@ -4,6 +4,7 @@ from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
+from iot_auth.fastapi import require_permissions
 
 from . import crud
 from ..models import models
@@ -18,6 +19,11 @@ from ..core.schemas import (
 )
 
 router = APIRouter(prefix="/rules", tags=["rules"])
+
+PERM_RULE_VIEW = "rules.view"
+PERM_RULE_ADD = "rules.add"
+PERM_RULE_CHANGE = "rules.change"
+PERM_RULE_DELETE = "rules.delete"
 
 
 def _to_rule_out(rule: models.Rule) -> RuleOut:
@@ -36,7 +42,11 @@ def _to_rule_out(rule: models.Rule) -> RuleOut:
     )
 
 
-@router.get("/", response_model=RuleListResponse)
+@router.get(
+    "/",
+    response_model=RuleListResponse,
+    dependencies=[Depends(require_permissions(PERM_RULE_VIEW))],
+)
 def list_rules(
     device_id: UUID | None = Query(default=None),
     is_enabled: bool | None = Query(default=None),
@@ -57,7 +67,11 @@ def list_rules(
     }
 
 
-@router.get("/all", response_model=RuleListSimpleResponse)
+@router.get(
+    "/all",
+    response_model=RuleListSimpleResponse,
+    dependencies=[Depends(require_permissions(PERM_RULE_VIEW))],
+)
 def list_rules_all(
     device_id: UUID | None = Query(default=None),
     is_enabled: bool | None = Query(default=None),
@@ -71,13 +85,22 @@ def list_rules_all(
     return {"data": [_to_rule_out(item) for item in items]}
 
 
-@router.post("/", response_model=RuleResponse, status_code=201)
+@router.post(
+    "/",
+    response_model=RuleResponse,
+    status_code=201,
+    dependencies=[Depends(require_permissions(PERM_RULE_ADD))],
+)
 def create_rule(payload: RuleCreate, db: Session = Depends(get_db)):
     rule = crud.create_rule(db, payload)
     return {"data": _to_rule_out(rule)}
 
 
-@router.get("/{rule_id}/", response_model=RuleResponse)
+@router.get(
+    "/{rule_id}/",
+    response_model=RuleResponse,
+    dependencies=[Depends(require_permissions(PERM_RULE_VIEW))],
+)
 def get_rule(rule_id: UUID, db: Session = Depends(get_db)):
     try:
         rule = crud.get_rule(db, rule_id)
@@ -86,7 +109,11 @@ def get_rule(rule_id: UUID, db: Session = Depends(get_db)):
     return {"data": _to_rule_out(rule)}
 
 
-@router.patch("/{rule_id}/", response_model=RuleResponse)
+@router.patch(
+    "/{rule_id}/",
+    response_model=RuleResponse,
+    dependencies=[Depends(require_permissions(PERM_RULE_CHANGE))],
+)
 def update_rule(rule_id: UUID, payload: RuleUpdate, db: Session = Depends(get_db)):
     try:
         rule = crud.get_rule(db, rule_id)
@@ -97,7 +124,11 @@ def update_rule(rule_id: UUID, payload: RuleUpdate, db: Session = Depends(get_db
     return {"data": _to_rule_out(rule)}
 
 
-@router.delete("/{rule_id}/", status_code=204)
+@router.delete(
+    "/{rule_id}/",
+    status_code=204,
+    dependencies=[Depends(require_permissions(PERM_RULE_DELETE))],
+)
 def delete_rule(rule_id: UUID, db: Session = Depends(get_db)):
     try:
         rule = crud.get_rule(db, rule_id)
@@ -108,7 +139,11 @@ def delete_rule(rule_id: UUID, db: Session = Depends(get_db)):
     return None
 
 
-@router.post("/{rule_id}/enable", response_model=RuleResponse)
+@router.post(
+    "/{rule_id}/enable",
+    response_model=RuleResponse,
+    dependencies=[Depends(require_permissions(PERM_RULE_CHANGE))],
+)
 def enable_rule(rule_id: UUID, db: Session = Depends(get_db)):
     try:
         rule = crud.get_rule(db, rule_id)
@@ -119,7 +154,11 @@ def enable_rule(rule_id: UUID, db: Session = Depends(get_db)):
     return {"data": _to_rule_out(rule)}
 
 
-@router.post("/{rule_id}/disable", response_model=RuleResponse)
+@router.post(
+    "/{rule_id}/disable",
+    response_model=RuleResponse,
+    dependencies=[Depends(require_permissions(PERM_RULE_CHANGE))],
+)
 def disable_rule(rule_id: UUID, db: Session = Depends(get_db)):
     try:
         rule = crud.get_rule(db, rule_id)
