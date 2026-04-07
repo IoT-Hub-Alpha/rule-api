@@ -27,4 +27,4 @@ def app(tmp_path_factory, monkeypatch):
 
 @pytest.fixture()
 def client(app):
-    return TestClient(app)
+    return TestClient(app, headers={"X-Internal-Service": "tests"})
