@@ -3,3 +3,4 @@ uvicorn[standard]>=0.24,<1
 sqlalchemy>=2,<3
 pydantic>=2,<3
 psycopg2-binary>=2.9,<3
+git+https://github.com/IoT-Hub-Alpha/jwt-auth-lib.git@task-41-jwt-auth-lib
