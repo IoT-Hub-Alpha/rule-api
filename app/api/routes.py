@@ -42,6 +42,11 @@ def _to_rule_out(rule: models.Rule) -> RuleOut:
     )
 
 
+@router.get("/health")
+def health(request):
+    return {"detail": "ok"}
+
+
 @router.get(
     "/",
     response_model=RuleListResponse,
