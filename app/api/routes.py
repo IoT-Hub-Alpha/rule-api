@@ -41,6 +41,9 @@ def _to_rule_out(rule: models.Rule) -> RuleOut:
         updated_at=rule.updated_at,
     )
 
+@router.get("/health")
+def health(request):
+    return {"detail": "ok"}
 
 @router.get(
     "/",
